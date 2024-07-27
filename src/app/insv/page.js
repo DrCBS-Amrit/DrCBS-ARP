@@ -2,8 +2,11 @@
 import { useState } from 'react';
 
 export default function Home() {
-  const [fields, setFields] = useState([{ fileName: '', text: '' }]);
-  const [maxFields, setMaxFields] = useState(3); // Initial number of fields
+  const [fields, setFields] = useState([
+    { fileName: '', text: '', url: '' },
+    { fileName: '', text: '', url: '' },
+    { fileName: '', text: '', url: '' },
+  ]);
 
   const handleFileChange = (index) => (e) => {
     const newFields = [...fields];
@@ -17,8 +20,14 @@ export default function Home() {
     setFields(newFields);
   };
 
+  const handleUrlChange = (index) => (e) => {
+    const newFields = [...fields];
+    newFields[index].url = e.target.value;
+    setFields(newFields);
+  };
+
   const addField = () => {
-    setFields([...fields, { fileName: '', text: '' }]);
+    setFields([...fields, { fileName: '', text: '', url: '' }]);
   };
 
   const removeField = (index) => () => {
@@ -29,7 +38,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-100">
       <header className="w-full py-6 bg-white shadow-md">
-        <h1 className="text-4xl text-center text-black font-bold">INS Vuln</h1>
+        <h1 className="text-4xl text-center text-black font-bold">INS Vulner</h1>
       </header>
       <main className="flex flex-col items-center justify-start flex-1 w-full px-4 space-y-6">
         <div className="flex flex-col items-center w-full max-w-3xl space-y-4 mt-6">
@@ -44,10 +53,10 @@ export default function Home() {
                     onChange={handleFileChange(index)} 
                   />
                 </label>
-                {fields.length > 3 && (
+                {fields.length > 3 && index >= 3 && (
                   <button
                     type="button"
-                    className="mt-2 text-red-500 underline"
+                    className="mt-2 text-red-500 underline text-sm"
                     onClick={removeField(index)}
                   >
                     Remove
@@ -56,10 +65,19 @@ export default function Home() {
               </div>
               <input
                 type="text"
-                className="px-4 py-2 border rounded shadow w-full max-w-xs"
+                className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm w-full max-w-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={field.text}
                 onChange={handleTextChange(index)}
                 placeholder="Enter Vulnerability"
+                style={{ maxWidth: '180px' }}
+              />
+              <input
+                type="text"
+                className="px-4 py-2 border border-gray-300 rounded-lg shadow-sm w-full max-w-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={field.url}
+                onChange={handleUrlChange(index)}
+                placeholder="Enter Link"
+                style={{ maxWidth: '110px' }} 
               />
             </div>
           ))}
@@ -68,7 +86,7 @@ export default function Home() {
         <div className="w-full max-w-3xl flex flex-col items-center space-y-2 mt-4">
           <button
             type="button"
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             onClick={addField}
           >
             Add More
